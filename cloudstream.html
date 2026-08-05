@@ -1,0 +1,1244 @@
+<!DOCTYPE html>
+<html lang="en" class="dark scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CloudStream - Modern Open Source Media Hub</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        darkBg: '#050508',
+                        darkSurface: '#0d0e15',
+                        accent: {
+                            indigo: '#6366f1',
+                            violet: '#8b5cf6',
+                            cyan: '#06b6d4',
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'system-ui', '-apple-system', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'Menlo', 'Monaco', 'Consolas', 'monospace']
+                    },
+                    animation: {
+                        'pulse-slow': 'pulse 6s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                        'glow-fade': 'glowFade 8s infinite alternate',
+                    },
+                    keyframes: {
+                        glowFade: {
+                            '0%': { opacity: '0.3', transform: 'scale(1)' },
+                            '100%': { opacity: '0.6', transform: 'scale(1.1)' }
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Lucide Icons CDN -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap');
+        
+        /* Enforce sharp geometric aesthetic */
+        *, *::before, *::after {
+            border-radius: 0 !important;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #050508;
+            color: #f3f4f6;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* Dark surface styling */
+        .surface-card {
+            background-color: rgba(18, 20, 29, 0.5);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5);
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .surface-card:hover {
+            background-color: rgba(25, 28, 41, 0.75);
+            transform: translateY(-2px);
+            box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.7);
+        }
+
+        /* Stacked layered screens styling */
+        .perspective-container {
+            perspective: 1200px;
+        }
+
+        .desktop-layer-card {
+            transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1), 
+                        opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1), 
+                        box-shadow 0.6s ease,
+                        filter 0.6s ease;
+            will-change: transform, opacity, filter;
+            transform-style: preserve-3d;
+        }
+
+        /* Slide animation helper classes */
+        @keyframes slideInActive {
+            0% {
+                transform: translate3d(80px, 0, 40px) scale(0.9) rotate(3deg);
+                opacity: 0;
+            }
+            100% {
+                transform: translate3d(0, 0, 0) scale(1) rotate(0deg);
+                opacity: 1;
+            }
+        }
+
+        .animate-slide-in {
+            animation: slideInActive 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        /* Grid mesh background effect */
+        .bg-grid-pattern {
+            background-image: radial-gradient(rgba(255, 255, 255, 0.08) 1px, transparent 1px);
+            background-size: 28px 28px;
+        }
+
+        .bg-radial-gradient {
+            background: radial-gradient(circle at 50% 0%, rgba(99, 102, 241, 0.12) 0%, rgba(5, 5, 8, 0) 70%);
+        }
+
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #050508;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #1e202e;
+            border-radius: 0 !important;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #2e3247;
+        }
+    </style>
+</head>
+<body class="antialiased text-gray-200 bg-[#050508] selection:bg-indigo-500 selection:text-white relative min-h-screen">
+
+    <!-- Navigation Header -->
+    <header class="fixed top-0 left-0 right-0 z-50 transition-all duration-300 bg-[#050508]/80 backdrop-blur-md border-b border-white/5" id="navbar">
+        <div class="max-w-7xl mx-auto px-6 lg:px-12">
+            <div class="flex items-center justify-between h-20">
+                
+                <!-- Logo -->
+                <a href="#" class="flex items-center gap-3 group">
+                    <img src="https://avatars.githubusercontent.com/u/110591699?v=4" alt="CloudStream Logo" class="w-9 h-9 object-cover border border-white/10 group-hover:scale-105 transition-transform" />
+                    <span class="text-base font-semibold tracking-tight text-white flex items-center gap-2">
+                        CloudStream
+                        <span class="text-[10px] font-mono font-medium px-2 py-0.5 bg-white/5 text-gray-400">v4.2</span>
+                    </span>
+                </a>
+
+                <!-- Desktop Nav -->
+                <nav class="hidden md:flex items-center gap-8 text-sm font-medium text-gray-400">
+                    <a href="#features" class="hover:text-white transition-colors">Features</a>
+                    <a href="#preview" class="hover:text-white transition-colors">Experience</a>
+                    <a href="#download" class="hover:text-white transition-colors">Downloads</a>
+                    <a href="#extensions" class="hover:text-white transition-colors">Extensions</a>
+                    <a href="#faq" class="hover:text-white transition-colors">FAQ</a>
+                </nav>
+
+                <!-- Actions -->
+                <div class="hidden md:flex items-center gap-4">
+                    <a href="https://github.com" target="_blank" rel="noopener" class="text-gray-400 hover:text-white transition-colors p-2" title="GitHub">
+                        <i data-lucide="github" class="w-5 h-5"></i>
+                    </a>
+                    <a href="#download" class="inline-flex items-center justify-center px-4 py-2 bg-white hover:bg-gray-100 text-black font-semibold text-xs transition-all shadow-lg shadow-white/5 active:scale-95">
+                        Get App
+                    </a>
+                </div>
+
+                <!-- Mobile menu toggle -->
+                <button id="mobile-menu-btn" class="md:hidden p-2 text-gray-400 hover:text-white focus:outline-none" aria-label="Toggle Navigation">
+                    <i data-lucide="menu" id="menu-icon-open" class="w-6 h-6"></i>
+                    <i data-lucide="x" id="menu-icon-close" class="w-6 h-6 hidden"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Mobile Drawer -->
+        <div id="mobile-menu" class="hidden md:hidden bg-[#0a0b10] px-6 pt-4 pb-8 space-y-4 border-b border-white/10">
+            <a href="#features" class="mobile-nav-link block text-sm font-medium text-gray-300 hover:text-white py-1">Features</a>
+            <a href="#preview" class="mobile-nav-link block text-sm font-medium text-gray-300 hover:text-white py-1">Experience</a>
+            <a href="#download" class="mobile-nav-link block text-sm font-medium text-gray-300 hover:text-white py-1">Downloads</a>
+            <a href="#extensions" class="mobile-nav-link block text-sm font-medium text-gray-300 hover:text-white py-1">Extensions</a>
+            <a href="#faq" class="mobile-nav-link block text-sm font-medium text-gray-300 hover:text-white py-1">FAQ</a>
+            <div class="pt-4 flex flex-col gap-3">
+                <a href="#download" class="mobile-nav-link text-center py-2.5 bg-white text-black font-semibold text-xs">Download CloudStream</a>
+                <a href="https://github.com" target="_blank" class="text-center py-2.5 bg-white/5 text-gray-300 font-medium text-xs">GitHub Repository</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="relative pt-36 pb-20 md:pt-48 md:pb-32 overflow-hidden bg-radial-gradient">
+        <!-- Ambient Glow -->
+        <div class="absolute top-0 left-1/2 -translate-x-1/2 w-[1000px] h-[500px] bg-indigo-600/10 blur-[140px] pointer-events-none animate-pulse-slow"></div>
+        <div class="absolute top-10 left-1/2 -translate-x-1/2 w-full max-w-7xl h-full bg-grid-pattern opacity-30 pointer-events-none"></div>
+
+        <div class="max-w-7xl mx-auto px-6 lg:px-12 relative z-10 text-center">
+            
+            <div class="inline-flex items-center gap-2 px-3.5 py-1.5 bg-white/[0.04] text-xs font-medium text-gray-300 mb-8 hover:bg-white/[0.08] transition-all cursor-pointer">
+                <span class="w-1.5 h-1.5 bg-emerald-400"></span>
+                <span class="text-gray-300">CloudStream 4.2 Release</span>
+                <span class="text-gray-500">•</span>
+                <span class="text-indigo-400 font-medium flex items-center gap-1">What's new <i data-lucide="arrow-right" class="w-3 h-3"></i></span>
+            </div>
+
+            <h1 class="text-4xl sm:text-6xl lg:text-7xl font-extrabold tracking-tight text-white max-w-4xl mx-auto leading-[1.08]">
+                Stream without limit. <br/>
+                <span class="text-transparent bg-clip-text bg-gradient-to-r from-gray-200 via-gray-400 to-gray-600">
+                    Zero ads. Modern interface.
+                </span>
+            </h1>
+
+            <p class="mt-6 text-base sm:text-lg text-gray-400 max-w-2xl mx-auto font-normal leading-relaxed">
+                The open-source, modular media player & stream indexer for Android, Android TV, Windows, macOS, and Linux. Built for speed, privacy, and full customizability.
+            </p>
+
+            <div class="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4 max-w-xl mx-auto">
+                <a href="https://cdn.ntechbd.app/cloudstream/app-stable-release.apk" onclick="downloadApp('Android APK')" class="w-full sm:w-1/2 px-6 py-4 bg-white text-black font-bold text-sm hover:bg-gray-100 transition-all flex items-center justify-center gap-3.5 shadow-xl shadow-white/10 active:scale-95 group">
+                    <i data-lucide="smartphone" class="w-5 h-5 text-black shrink-0"></i>
+                    <div class="text-left leading-tight">
+                        <div class="text-[10px] uppercase font-mono tracking-wider text-gray-500 font-semibold">Android / Fire TV</div>
+                        <div class="text-sm font-bold text-black flex items-center gap-1.5 mt-0.5">
+                            <span>Download APK</span>
+                            <i data-lucide="arrow-down" class="w-3.5 h-3.5 group-hover:translate-y-0.5 transition-transform"></i>
+                        </div>
+                    </div>
+                </a>
+                
+                <a href="https://cdn.ntechbd.app/cloudstream/CloudStream%20Desktop.msi" onclick="downloadApp('Desktop Setup')" class="w-full sm:w-1/2 px-6 py-4 bg-white/[0.08] hover:bg-white/[0.14] text-white font-bold text-sm transition-all flex items-center justify-center gap-3.5 active:scale-95 group border-0">
+                    <i data-lucide="monitor" class="w-5 h-5 text-indigo-400 shrink-0"></i>
+                    <div class="text-left leading-tight">
+                        <div class="text-[10px] uppercase font-mono tracking-wider text-gray-400 font-semibold">Windows / Mac / Linux</div>
+                        <div class="text-sm font-bold text-white flex items-center gap-1.5 mt-0.5">
+                            <span>Download Desktop</span>
+                            <i data-lucide="arrow-down" class="w-3.5 h-3.5 text-indigo-400 group-hover:translate-y-0.5 transition-transform"></i>
+                        </div>
+                    </div>
+                </a>
+            </div>
+
+            <div class="mt-4 flex items-center justify-center gap-6 text-xs text-gray-500">
+                <a href="#download" class="hover:text-gray-300 transition-colors flex items-center gap-1">
+                    <i data-lucide="layers" class="w-3.5 h-3.5"></i> All builds & checksums
+                </a>
+                <span>•</span>
+                <a href="#preview" class="hover:text-gray-300 transition-colors flex items-center gap-1">
+                    <i data-lucide="eye" class="w-3.5 h-3.5"></i> Live UI Preview
+                </a>
+            </div>
+
+            <div class="mt-14 pt-8 border-t border-white/[0.05] flex items-center justify-center gap-6 sm:gap-10 text-xs font-mono text-gray-400 flex-wrap">
+                <div class="flex items-center gap-2">
+                    <i data-lucide="smartphone" class="w-4 h-4 text-emerald-400"></i>
+                    <span>Android 5.0+</span>
+                </div>
+                <div class="flex items-center gap-2">
+                    <i data-lucide="tv" class="w-4 h-4 text-indigo-400"></i>
+                    <span>Fire TV / Android TV</span>
+                </div>
+                <div class="flex items-center gap-2">
+                    <i data-lucide="monitor" class="w-4 h-4 text-blue-400"></i>
+                    <span>Windows 10 / 11</span>
+                </div>
+                <div class="flex items-center gap-2">
+                    <i data-lucide="laptop" class="w-4 h-4 text-purple-400"></i>
+                    <span>macOS (Apple & Intel)</span>
+                </div>
+                <div class="flex items-center gap-2">
+                    <i data-lucide="terminal" class="w-4 h-4 text-amber-400"></i>
+                    <span>Linux AppImage/Flatpak</span>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- Interactive App Preview Showcase (Tailored Experience) -->
+    <section id="preview" class="py-20 relative bg-black/40 border-y border-white/[0.05]">
+        <div class="max-w-7xl mx-auto px-6 lg:px-12">
+            
+            <div class="text-center max-w-2xl mx-auto mb-10">
+                <h2 class="text-xs font-mono uppercase tracking-widest text-indigo-400">Tailored Experience</h2>
+                <p class="text-3xl font-bold text-white mt-2 tracking-tight">Designed for Every Display</p>
+                <p class="text-sm text-gray-400 mt-2">Explore desktop layered interface alongside mobile and TV screens.</p>
+            </div>
+
+            <!-- Segmented Control Tab Switcher -->
+            <div class="flex justify-center mb-10">
+                <div class="inline-flex bg-[#0d0e15] p-1.5 border border-white/10 font-mono text-xs shadow-2xl">
+                    <button onclick="switchView('desktop')" id="btn-desktop" class="view-btn px-6 py-2.5 bg-white text-black font-semibold text-xs transition-all shadow-md">
+                        Desktop Layered UI
+                    </button>
+                    <button onclick="switchView('mobile')" id="btn-mobile" class="view-btn px-6 py-2.5 bg-white/[0.03] hover:bg-white/[0.08] text-gray-400 hover:text-white font-medium text-xs transition-all">
+                        Android Mobile
+                    </button>
+                    <button onclick="switchView('tv')" id="btn-tv" class="view-btn px-6 py-2.5 bg-white/[0.03] hover:bg-white/[0.08] text-gray-400 hover:text-white font-medium text-xs transition-all">
+                        Android TV
+                    </button>
+                </div>
+            </div>
+
+            <!-- Screen Showcase Container -->
+            <div class="relative max-w-6xl mx-auto">
+                <div class="relative">
+                    
+                    <!-- Ambient Glow Behind Device Mockups -->
+                    <div class="absolute -top-10 left-1/2 -translate-x-1/2 w-3/4 h-full bg-gradient-to-r from-indigo-600/15 via-purple-600/10 to-cyan-600/15 blur-3xl pointer-events-none"></div>
+
+                    <!-- Screen Canvas Container -->
+                    <div id="mockup-screen" class="transition-all relative z-10">
+                        <!-- Content generated via JavaScript (defaults to Desktop Layered UI) -->
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- Feature Grid Section -->
+    <section id="features" class="py-24 relative">
+        <div class="max-w-7xl mx-auto px-6 lg:px-12">
+            
+            <div class="text-center max-w-2xl mx-auto mb-16">
+                <h2 class="text-xs font-mono uppercase tracking-widest text-indigo-400">Core Architecture</h2>
+                <p class="text-3xl font-bold text-white mt-2 tracking-tight">Engineered for Performance & Freedom</p>
+            </div>
+
+            <!-- 3-column sharp feature grid -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                
+                <div class="surface-card p-8 group">
+                    <div class="w-10 h-10 bg-white/[0.05] text-white flex items-center justify-center mb-6 group-hover:bg-white group-hover:text-black transition-all">
+                        <i data-lucide="shield-off" class="w-5 h-5"></i>
+                    </div>
+                    <h3 class="text-lg font-semibold text-white mb-2">Zero Ads or Telemetry</h3>
+                    <p class="text-sm text-gray-400 leading-relaxed">
+                        Pure focus on streaming. Completely ad-free interface with no background analytics or tracking scripts.
+                    </p>
+                </div>
+
+                <div class="surface-card p-8 group">
+                    <div class="w-10 h-10 bg-white/[0.05] text-white flex items-center justify-center mb-6 group-hover:bg-white group-hover:text-black transition-all">
+                        <i data-lucide="blocks" class="w-5 h-5"></i>
+                    </div>
+                    <h3 class="text-lg font-semibold text-white mb-2">Extension Architecture</h3>
+                    <p class="text-sm text-gray-400 leading-relaxed">
+                        Modular plugin ecosystem allowing users to easily connect their preferred providers and metadata engines.
+                    </p>
+                </div>
+
+                <div class="surface-card p-8 group">
+                    <div class="w-10 h-10 bg-white/[0.05] text-white flex items-center justify-center mb-6 group-hover:bg-white group-hover:text-black transition-all">
+                        <i data-lucide="cast" class="w-5 h-5"></i>
+                    </div>
+                    <h3 class="text-lg font-semibold text-white mb-2">Chromecast Integration</h3>
+                    <p class="text-sm text-gray-400 leading-relaxed">
+                        Stream effortlessly to your Smart TV, Chromecast, or DLNA receiver with full native controls.
+                    </p>
+                </div>
+
+                <div class="surface-card p-8 group">
+                    <div class="w-10 h-10 bg-white/[0.05] text-white flex items-center justify-center mb-6 group-hover:bg-white group-hover:text-black transition-all">
+                        <i data-lucide="subtitles" class="w-5 h-5"></i>
+                    </div>
+                    <h3 class="text-lg font-semibold text-white mb-2">Automatic Subtitles</h3>
+                    <p class="text-sm text-gray-400 leading-relaxed">
+                        Automatic multi-language subtitle fetching with custom text scaling, styling, and sync offset.
+                    </p>
+                </div>
+
+                <div class="surface-card p-8 group">
+                    <div class="w-10 h-10 bg-white/[0.05] text-white flex items-center justify-center mb-6 group-hover:bg-white group-hover:text-black transition-all">
+                        <i data-lucide="download" class="w-5 h-5"></i>
+                    </div>
+                    <h3 class="text-lg font-semibold text-white mb-2">Offline Downloads</h3>
+                    <p class="text-sm text-gray-400 leading-relaxed">
+                        Download episodes or movies for offline playback with background multi-threaded download manager.
+                    </p>
+                </div>
+
+                <div class="surface-card p-8 group">
+                    <div class="w-10 h-10 bg-white/[0.05] text-white flex items-center justify-center mb-6 group-hover:bg-white group-hover:text-black transition-all">
+                        <i data-lucide="refresh-cw" class="w-5 h-5"></i>
+                    </div>
+                    <h3 class="text-lg font-semibold text-white mb-2">Cross-Platform Sync</h3>
+                    <p class="text-sm text-gray-400 leading-relaxed">
+                        Sync your bookmarks, watch progress, and history seamlessly across mobile, TV, and desktop devices.
+                    </p>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Downloads Section -->
+    <section id="download" class="py-24 relative bg-white/[0.01]">
+        <div class="max-w-7xl mx-auto px-6 lg:px-12">
+            
+            <div class="text-center max-w-2xl mx-auto mb-16">
+                <h2 class="text-xs font-mono uppercase tracking-widest text-indigo-400">Downloads</h2>
+                <p class="text-3xl font-bold text-white mt-2 tracking-tight">Available Across Every Operating System</p>
+                <p class="text-sm text-gray-400 mt-2">Select your platform to download official pre-built binaries.</p>
+            </div>
+
+            <!-- Download Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                
+                <!-- Android -->
+                <div class="surface-card p-6 flex flex-col justify-between">
+                    <div>
+                        <div class="flex items-center justify-between mb-6">
+                            <div class="w-10 h-10 bg-emerald-500/10 text-emerald-400 flex items-center justify-center">
+                                <i data-lucide="smartphone" class="w-5 h-5"></i>
+                            </div>
+                            <span class="text-[10px] font-mono px-2 py-0.5 bg-emerald-500/10 text-emerald-400 font-medium">Stable</span>
+                        </div>
+                        <h3 class="text-lg font-semibold text-white">Android / TV</h3>
+                        <p class="text-xs text-gray-400 mt-1">Android 5.0+ • TV & FireStick</p>
+                        
+                        <div class="mt-6 space-y-2 text-xs font-mono text-gray-400">
+                            <div class="flex justify-between py-1 border-b border-white/[0.04]">
+                                <span>Package</span>
+                                <span class="text-gray-300">Universal APK</span>
+                            </div>
+                            <div class="flex justify-between py-1 border-b border-white/[0.04]">
+                                <span>Version</span>
+                                <span class="text-gray-300">4.2.0</span>
+                            </div>
+                            <div class="flex justify-between py-1">
+                                <span>Size</span>
+                                <span class="text-gray-300">38.4 MB</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mt-8 space-y-2">
+                        <a href="https://cdn.ntechbd.app/cloudstream/app-stable-release.apk" onclick="downloadApp('Android APK')" class="w-full py-2.5 bg-white hover:bg-gray-100 text-black font-semibold text-xs transition-all flex items-center justify-center gap-2 active:scale-95">
+                            <i data-lucide="download" class="w-3.5 h-3.5"></i> Download APK
+                        </a>
+                        <button onclick="toggleModal('tv-guide')" class="w-full py-2 text-[11px] text-gray-400 hover:text-white transition-colors">
+                            Fire TV Installation Guide
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Windows -->
+                <div class="surface-card p-6 flex flex-col justify-between">
+                    <div>
+                        <div class="flex items-center justify-between mb-6">
+                            <div class="w-10 h-10 bg-blue-500/10 text-blue-400 flex items-center justify-center">
+                                <i data-lucide="monitor" class="w-5 h-5"></i>
+                            </div>
+                            <span class="text-[10px] font-mono px-2 py-0.5 bg-blue-500/10 text-blue-400 font-medium">Desktop</span>
+                        </div>
+                        <h3 class="text-lg font-semibold text-white">Windows</h3>
+                        <p class="text-xs text-gray-400 mt-1">Windows 10 / 11 (64-bit)</p>
+                        
+                        <div class="mt-6 space-y-2 text-xs font-mono text-gray-400">
+                            <div class="flex justify-between py-1 border-b border-white/[0.04]">
+                                <span>Package</span>
+                                <span class="text-gray-300">Installer (.msi)</span>
+                            </div>
+                            <div class="flex justify-between py-1 border-b border-white/[0.04]">
+                                <span>Version</span>
+                                <span class="text-gray-300">1.0.3</span>
+                            </div>
+                            <div class="flex justify-between py-1">
+                                <span>Size</span>
+                                <span class="text-gray-300">64.2 MB</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mt-8 space-y-2">
+                        <a href="https://cdn.ntechbd.app/cloudstream/CloudStream%20Desktop.msi" onclick="downloadApp('Windows Setup')" class="w-full py-2.5 bg-white hover:bg-gray-100 text-black font-semibold text-xs transition-all flex items-center justify-center gap-2 active:scale-95">
+                            <i data-lucide="download" class="w-3.5 h-3.5"></i> Download Setup (.msi)
+                        </a>
+                        <a href="https://cdn.ntechbd.app/cloudstream/CloudStream%20Desktop.msi" onclick="downloadApp('Windows Desktop')" class="w-full py-2 text-[11px] text-gray-400 hover:text-white transition-colors block text-center">
+                            Direct Link (.msi)
+                        </a>
+                    </div>
+                </div>
+
+                <!-- macOS -->
+                <div class="surface-card p-6 flex flex-col justify-between">
+                    <div>
+                        <div class="flex items-center justify-between mb-6">
+                            <div class="w-10 h-10 bg-purple-500/10 text-purple-400 flex items-center justify-center">
+                                <i data-lucide="laptop" class="w-5 h-5"></i>
+                            </div>
+                            <span class="text-[10px] font-mono px-2 py-0.5 bg-purple-500/10 text-purple-400 font-medium">Universal</span>
+                        </div>
+                        <h3 class="text-lg font-semibold text-white">macOS</h3>
+                        <p class="text-xs text-gray-400 mt-1">Apple Silicon & Intel Mac</p>
+                        
+                        <div class="mt-6 space-y-2 text-xs font-mono text-gray-400">
+                            <div class="flex justify-between py-1 border-b border-white/[0.04]">
+                                <span>Arch</span>
+                                <span class="text-gray-300">Arm64 / x64</span>
+                            </div>
+                            <div class="flex justify-between py-1 border-b border-white/[0.04]">
+                                <span>Version</span>
+                                <span class="text-gray-300">1.8.2</span>
+                            </div>
+                            <div class="flex justify-between py-1">
+                                <span>Size</span>
+                                <span class="text-gray-300">72.8 MB</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mt-8 space-y-2">
+                        <button onclick="downloadApp('macOS DMG')" class="w-full py-2.5 bg-white hover:bg-gray-100 text-black font-semibold text-xs transition-all flex items-center justify-center gap-2 active:scale-95">
+                            <i data-lucide="download" class="w-3.5 h-3.5"></i> Download DMG
+                        </button>
+                        <button onclick="toggleModal('mac-guide')" class="w-full py-2 text-[11px] text-gray-400 hover:text-white transition-colors">
+                            macOS Gatekeeper Tip
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Linux -->
+                <div class="surface-card p-6 flex flex-col justify-between">
+                    <div>
+                        <div class="flex items-center justify-between mb-6">
+                            <div class="w-10 h-10 bg-amber-500/10 text-amber-400 flex items-center justify-center">
+                                <i data-lucide="terminal" class="w-5 h-5"></i>
+                            </div>
+                            <span class="text-[10px] font-mono px-2 py-0.5 bg-amber-500/10 text-amber-400 font-medium">Linux</span>
+                        </div>
+                        <h3 class="text-lg font-semibold text-white">Linux</h3>
+                        <p class="text-xs text-gray-400 mt-1">Ubuntu, Arch, Fedora</p>
+                        
+                        <div class="mt-6 space-y-2 text-xs font-mono text-gray-400">
+                            <div class="flex justify-between py-1 border-b border-white/[0.04]">
+                                <span>Formats</span>
+                                <span class="text-gray-300">AppImage / Flatpak</span>
+                            </div>
+                            <div class="flex justify-between py-1 border-b border-white/[0.04]">
+                                <span>Version</span>
+                                <span class="text-gray-300">1.8.2</span>
+                            </div>
+                            <div class="flex justify-between py-1">
+                                <span>Size</span>
+                                <span class="text-gray-300">58.1 MB</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mt-8 space-y-2">
+                        <button onclick="downloadApp('Linux AppImage')" class="w-full py-2.5 bg-white hover:bg-gray-100 text-black font-semibold text-xs transition-all flex items-center justify-center gap-2 active:scale-95">
+                            <i data-lucide="download" class="w-3.5 h-3.5"></i> Download AppImage
+                        </button>
+                        <button onclick="downloadApp('Linux Flatpak')" class="w-full py-2 text-[11px] text-gray-400 hover:text-white transition-colors">
+                            Install via Flatpak
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </section>
+
+    <!-- Extension Engine Section -->
+    <section id="extensions" class="py-24 relative">
+        <div class="max-w-7xl mx-auto px-6 lg:px-12">
+            
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                <div>
+                    <h2 class="text-xs font-mono uppercase tracking-widest text-indigo-400">Modularity</h2>
+                    <h3 class="text-3xl font-bold text-white mt-2 tracking-tight">Provider Repositories</h3>
+                    <p class="text-sm text-gray-400 mt-4 leading-relaxed">
+                        CloudStream functions as a clean engine. Simply add your favorite community repository URL in the app settings to fetch index metadata and playback links.
+                    </p>
+
+                    <div class="mt-8 space-y-4">
+                        <div class="flex items-start gap-4">
+                            <div class="w-6 h-6 bg-white/10 text-white font-mono text-xs flex items-center justify-center shrink-0 mt-0.5">1</div>
+                            <p class="text-xs text-gray-300">Download and launch the CloudStream application on your device.</p>
+                        </div>
+                        <div class="flex items-start gap-4">
+                            <div class="w-6 h-6 bg-white/10 text-white font-mono text-xs flex items-center justify-center shrink-0 mt-0.5">2</div>
+                            <p class="text-xs text-gray-300">Navigate to <span class="font-mono text-white">Settings &gt; Extensions &gt; Add Repository</span>.</p>
+                        </div>
+                        <div class="flex items-start gap-4">
+                            <div class="w-6 h-6 bg-white/10 text-white font-mono text-xs flex items-center justify-center shrink-0 mt-0.5">3</div>
+                            <p class="text-xs text-gray-300">Paste the extension repository link to immediately index media.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Minimal Interactive Code Block -->
+                <div class="surface-card p-6 sm:p-8">
+                    <div class="flex items-center justify-between mb-6">
+                        <span class="text-xs font-semibold text-white">Repository URLs</span>
+                        <span class="text-[10px] font-mono text-gray-500">Spec v3</span>
+                    </div>
+
+                    <div class="space-y-4">
+                        <div>
+                            <label class="text-xs text-gray-400 block mb-1">Standard Repository</label>
+                            <div class="flex items-center justify-between p-3 bg-black/40 font-mono text-xs text-indigo-300">
+                                <span id="repo-url-1" class="truncate mr-2">https://cloudstream.cf/repo/english</span>
+                                <button onclick="copyToClipboard('repo-url-1', 'btn-copy-1')" id="btn-copy-1" class="px-3 py-1 bg-white/10 hover:bg-white/20 text-white transition-colors text-[11px] shrink-0 font-sans">
+                                    Copy
+                                </button>
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="text-xs text-gray-400 block mb-1">Anime & Multilingual Repo</label>
+                            <div class="flex items-center justify-between p-3 bg-black/40 font-mono text-xs text-indigo-300">
+                                <span id="repo-url-2" class="truncate mr-2">https://cloudstream.cf/repo/anime-multi</span>
+                                <button onclick="copyToClipboard('repo-url-2', 'btn-copy-2')" id="btn-copy-2" class="px-3 py-1 bg-white/10 hover:bg-white/20 text-white transition-colors text-[11px] shrink-0 font-sans">
+                                    Copy
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <p class="text-[11px] text-gray-500 mt-6 leading-relaxed">
+                        Note: Always verify repository sources before adding extension packages to your installation.
+                    </p>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <section id="faq" class="py-24 relative">
+        <div class="max-w-3xl mx-auto px-6 lg:px-12">
+            
+            <div class="text-center mb-14">
+                <h2 class="text-xs font-mono uppercase tracking-widest text-indigo-400">FAQ</h2>
+                <p class="text-3xl font-bold text-white mt-2 tracking-tight">Frequently Asked Questions</p>
+            </div>
+
+            <!-- Collapsible Accordion -->
+            <div class="space-y-3">
+                
+                <div class="surface-card overflow-hidden">
+                    <button onclick="toggleFaq(1)" class="w-full p-5 text-left flex items-center justify-between gap-4 font-medium text-white text-sm hover:text-indigo-300 transition-colors">
+                        <span>Is CloudStream completely free to use?</span>
+                        <i data-lucide="chevron-down" id="faq-icon-1" class="w-4 h-4 text-gray-400 transition-transform"></i>
+                    </button>
+                    <div id="faq-ans-1" class="hidden px-5 pb-5 text-xs text-gray-400 leading-relaxed pt-2 border-t border-white/[0.04]">
+                        Yes. CloudStream is 100% free and open-source software released under GNU GPL v3.0. There are no paid tiers, subscriptions, or hidden charges.
+                    </div>
+                </div>
+
+                <div class="surface-card overflow-hidden">
+                    <button onclick="toggleFaq(2)" class="w-full p-5 text-left flex items-center justify-between gap-4 font-medium text-white text-sm hover:text-indigo-300 transition-colors">
+                        <span>How do I install CloudStream on Fire TV or Android TV?</span>
+                        <i data-lucide="chevron-down" id="faq-icon-2" class="w-4 h-4 text-gray-400 transition-transform"></i>
+                    </button>
+                    <div id="faq-ans-2" class="hidden px-5 pb-5 text-xs text-gray-400 leading-relaxed pt-2 border-t border-white/[0.04]">
+                        Use the <strong>Downloader App</strong> from your TV App Store. Input the direct APK download URL, download the file, and enable "Install Unknown Apps" in developer settings.
+                    </div>
+                </div>
+
+                <div class="surface-card overflow-hidden">
+                    <button onclick="toggleFaq(3)" class="w-full p-5 text-left flex items-center justify-between gap-4 font-medium text-white text-sm hover:text-indigo-300 transition-colors">
+                        <span>Does CloudStream host any media content?</span>
+                        <i data-lucide="chevron-down" id="faq-icon-3" class="w-4 h-4 text-gray-400 transition-transform"></i>
+                    </button>
+                    <div id="faq-ans-3" class="hidden px-5 pb-5 text-xs text-gray-400 leading-relaxed pt-2 border-t border-white/[0.04]">
+                        No. CloudStream does not host, store, or stream video content from its servers. It operates strictly as an indexing media hub based on user-added extensions.
+                    </div>
+                </div>
+
+                <div class="surface-card overflow-hidden">
+                    <button onclick="toggleFaq(4)" class="w-full p-5 text-left flex items-center justify-between gap-4 font-medium text-white text-sm hover:text-indigo-300 transition-colors">
+                        <span>Is iOS / iPhone supported?</span>
+                        <i data-lucide="chevron-down" id="faq-icon-4" class="w-4 h-4 text-gray-400 transition-transform"></i>
+                    </button>
+                    <div id="faq-ans-4" class="hidden px-5 pb-5 text-xs text-gray-400 leading-relaxed pt-2 border-t border-white/[0.04]">
+                        Currently, CloudStream is natively available on Android, Android TV, Windows, macOS, and Linux. Due to iOS app sideloading constraints, an iOS app is not officially released.
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </section>
+
+    <!-- CTA Banner -->
+    <section class="py-20 relative">
+        <div class="max-w-7xl mx-auto px-6 lg:px-12">
+            <div class="surface-card p-10 sm:p-16 text-center relative overflow-hidden">
+                <div class="max-w-xl mx-auto relative z-10">
+                    <h2 class="text-3xl font-extrabold text-white tracking-tight">Ready to Stream Seamlessly?</h2>
+                    <p class="text-gray-400 text-sm mt-3">Download CloudStream for your device and enjoy a clean, fast experience.</p>
+                    <div class="mt-8 flex justify-center gap-4">
+                        <a href="#download" class="px-6 py-3 bg-white text-black font-semibold text-xs hover:bg-gray-100 transition-all shadow-lg active:scale-95">
+                            Download Now
+                        </a>
+                        <a href="https://github.com" target="_blank" class="px-6 py-3 bg-white/5 text-white font-medium text-xs hover:bg-white/10 transition-all active:scale-95">
+                            GitHub Repository
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="py-12 border-t border-white/[0.05] text-xs text-gray-500">
+        <div class="max-w-7xl mx-auto px-6 lg:px-12 flex flex-col sm:flex-row items-center justify-between gap-6">
+            <div class="flex items-center gap-3">
+                <img src="https://avatars.githubusercontent.com/u/110591699?v=4" alt="CloudStream Logo" class="w-6 h-6 object-cover" />
+                <span class="text-gray-300 font-medium">CloudStream Engine</span>
+            </div>
+            <p>&copy; 2026 CloudStream. Licensed under GNU GPL v3.0.</p>
+            <div class="flex gap-6 text-gray-400">
+                <a href="https://github.com" target="_blank" class="hover:text-white transition-colors">GitHub</a>
+                <a href="#download" class="hover:text-white transition-colors">Downloads</a>
+                <a href="#faq" class="hover:text-white transition-colors">FAQ</a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="fixed bottom-6 right-6 z-50 transform translate-y-20 opacity-0 transition-all duration-300 pointer-events-none">
+        <div class="surface-card px-4 py-3 text-white text-xs font-medium flex items-center gap-2.5 shadow-2xl">
+            <i data-lucide="check-circle" class="w-4 h-4 text-emerald-400"></i>
+            <span id="toast-message">Copied to clipboard!</span>
+        </div>
+    </div>
+
+    <!-- Info Modal Popup -->
+    <div id="info-modal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm hidden">
+        <div class="surface-card max-w-md w-full p-6 relative">
+            <button onclick="toggleModal()" class="absolute top-4 right-4 text-gray-400 hover:text-white">
+                <i data-lucide="x" class="w-4 h-4"></i>
+            </button>
+            <h3 class="text-base font-semibold text-white mb-3" id="modal-title">Guide</h3>
+            <div class="text-xs text-gray-300 space-y-2 leading-relaxed" id="modal-body">
+                <!-- Dynamic Content -->
+            </div>
+            <div class="mt-6 flex justify-end">
+                <button onclick="toggleModal()" class="px-4 py-2 bg-white text-black font-semibold text-xs">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Image Lightbox Modal -->
+    <div id="lightbox-modal" class="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-8 bg-black/90 backdrop-blur-md hidden" onclick="closeLightbox()">
+        <div class="relative max-w-5xl max-h-[90vh] flex flex-col items-center justify-center" onclick="event.stopPropagation()">
+            <button onclick="closeLightbox()" class="absolute -top-10 right-0 text-gray-300 hover:text-white flex items-center gap-1 text-xs font-mono">
+                <i data-lucide="x" class="w-5 h-5"></i> Close (ESC)
+            </button>
+            <div class="surface-card p-2 border border-white/20">
+                <img id="lightbox-img" src="" alt="Screenshot" class="max-h-[82vh] w-auto object-contain" />
+            </div>
+            <p id="lightbox-title" class="text-xs font-mono text-gray-300 mt-3 text-center"></p>
+        </div>
+    </div>
+
+    <script>
+        // Desktop Screen Images Data Stack
+        const pcDesktopScreens = [
+            {
+                id: 1,
+                title: "CloudStream PC - Media Feed & Discovery",
+                tag: "Screen 01 • Main Dashboard",
+                desc: "Discover trending media, indexed sources & continue watching history.",
+                url: "https://cdn.ntechbd.app/cloudstream/PC/SCREEN%20(1).png"
+            },
+            {
+                id: 2,
+                title: "CloudStream PC - Movie & Series Hub",
+                tag: "Screen 02 • Content Catalog",
+                desc: "Filter media categories, high bitrate stream pickers & repository providers.",
+                url: "https://cdn.ntechbd.app/cloudstream/PC/SCREEN%20(2).png"
+            },
+            {
+                id: 3,
+                title: "CloudStream PC - Metadata & Source Selector",
+                tag: "Screen 03 • Details & Cast",
+                desc: "Comprehensive metadata, episode lists, multi-language audio & external player mirrors.",
+                url: "https://cdn.ntechbd.app/cloudstream/PC/SCREEN%20(3).png"
+            },
+            {
+                id: 4,
+                title: "CloudStream PC - Player & Hardware Decoder Engine",
+                tag: "Screen 04 • Cinema Player",
+                desc: "Integrated playback core with subtitles, GPU hardware acceleration & custom shaders.",
+                url: "https://cdn.ntechbd.app/cloudstream/PC/SCREEN%20(4).png"
+            }
+        ];
+
+        let activeDesktopIndex = 0;
+
+        // Bring desktop screen card to front of stack with sliding animation
+        function bringDesktopToFront(index) {
+            if (activeDesktopIndex === index) return;
+            activeDesktopIndex = index;
+            renderDesktopLayeredUI(true);
+        }
+
+        function nextDesktopSlide() {
+            activeDesktopIndex = (activeDesktopIndex + 1) % pcDesktopScreens.length;
+            renderDesktopLayeredUI(true);
+        }
+
+        function prevDesktopSlide() {
+            activeDesktopIndex = (activeDesktopIndex - 1 + pcDesktopScreens.length) % pcDesktopScreens.length;
+            renderDesktopLayeredUI(true);
+        }
+
+        function renderDesktopLayeredUI(isAnimated = false) {
+            const container = document.getElementById('desktop-layered-container');
+            if (!container) return;
+
+            const currentScreen = pcDesktopScreens[activeDesktopIndex];
+
+            let stackHtml = `
+                <div class="space-y-6">
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-white/10">
+                        <div class="flex items-center gap-3">
+                            <div class="w-2.5 h-2.5 bg-indigo-400 animate-pulse"></div>
+                            <div>
+                                <h3 class="text-base font-bold text-white flex items-center gap-2">
+                                    Desktop Layered Experience
+                                    <span class="text-xs font-mono text-indigo-400 font-normal">(${activeDesktopIndex + 1} / ${pcDesktopScreens.length})</span>
+                                </h3>
+                                <p class="text-xs text-gray-400 mt-0.5">${currentScreen.title.split(' - ')[1] || currentScreen.title} — ${currentScreen.desc}</p>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-center gap-3 font-mono text-xs self-start sm:self-center">
+                            <div class="flex items-center gap-1.5 mr-2">
+                                ${pcDesktopScreens.map((_, idx) => `
+                                    <button onclick="bringDesktopToFront(${idx})" 
+                                            class="h-1.5 transition-all ${activeDesktopIndex === idx ? 'w-6 bg-indigo-500' : 'w-2 bg-white/20 hover:bg-white/40'}"
+                                            title="Go to Screen ${idx + 1}"></button>
+                                `).join('')}
+                            </div>
+
+                            <div class="flex items-center gap-1 border border-white/10 bg-white/[0.03] p-1">
+                                <button onclick="prevDesktopSlide()" class="p-1.5 hover:bg-white/10 text-gray-300 hover:text-white transition-colors" title="Previous Screen">
+                                    <i data-lucide="chevron-left" class="w-4 h-4"></i>
+                                </button>
+                                <button onclick="nextDesktopSlide()" class="p-1.5 hover:bg-white/10 text-gray-300 hover:text-white transition-colors" title="Next Screen">
+                                    <i data-lucide="chevron-right" class="w-4 h-4"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="relative min-h-[380px] sm:min-h-[500px] md:min-h-[560px] perspective-container flex items-center justify-center py-2">
+                        <div class="relative w-full max-w-4xl h-[320px] sm:h-[450px] md:h-[490px] flex items-center justify-center">
+            `;
+
+            pcDesktopScreens.forEach((screen, idx) => {
+                const offset = (idx - activeDesktopIndex + pcDesktopScreens.length) % pcDesktopScreens.length;
+                
+                let transformStyle = '';
+                let zIndex = 10 - offset;
+                let opacity = 1;
+                let shadow = 'shadow-2xl';
+                let filter = 'none';
+
+                if (offset === 0) {
+                    transformStyle = 'translate3d(0, 0, 0) scale(1) rotateX(0deg)';
+                    zIndex = 40;
+                    shadow = 'shadow-[0_25px_60px_-15px_rgba(99,102,241,0.4)] border-indigo-500/40';
+                } else if (offset === 1) {
+                    transformStyle = 'translate3d(36px, -24px, -60px) scale(0.92) rotate(1.8deg)';
+                    opacity = 0.75;
+                    filter = 'brightness(0.7)';
+                } else if (offset === 2) {
+                    transformStyle = 'translate3d(-36px, -48px, -120px) scale(0.84) rotate(-1.8deg)';
+                    opacity = 0.55;
+                    filter = 'brightness(0.5)';
+                } else if (offset === 3) {
+                    transformStyle = 'translate3d(0px, -72px, -180px) scale(0.76)';
+                    opacity = 0.35;
+                    filter = 'brightness(0.3)';
+                }
+
+                const animationClass = (offset === 0 && isAnimated) ? 'animate-slide-in' : '';
+
+                stackHtml += `
+                    <div onclick="bringDesktopToFront(${idx})" 
+                         class="desktop-layer-card absolute inset-0 w-full h-full surface-card border border-white/20 p-2 sm:p-3 overflow-hidden ${shadow} cursor-pointer group ${animationClass}"
+                         style="transform: ${transformStyle}; z-index: ${zIndex}; opacity: ${opacity}; filter: ${filter};">
+                        
+                        <div class="bg-[#0b0d14] px-3 py-2 border-b border-white/10 flex items-center justify-between mb-2">
+                            <div class="flex items-center gap-2">
+                                <div class="w-2.5 h-2.5 rounded-full bg-red-500/80"></div>
+                                <div class="w-2.5 h-2.5 rounded-full bg-yellow-500/80"></div>
+                                <div class="w-2.5 h-2.5 rounded-full bg-green-500/80"></div>
+                                <span class="text-[10px] font-mono text-gray-400 ml-2 truncate max-w-[200px] sm:max-w-xs">${screen.tag}</span>
+                            </div>
+                            <div class="flex items-center gap-3">
+                                <span class="text-[10px] font-mono text-indigo-400 bg-indigo-500/10 px-2 py-0.5 border border-indigo-500/20 hidden sm:inline-block">PC Desktop v4.2</span>
+                                <button onclick="event.stopPropagation(); openLightbox('${screen.url}', '${screen.title}')" class="text-gray-400 hover:text-white transition-colors" title="Expand High-Res Screen">
+                                    <i data-lucide="maximize-2" class="w-3.5 h-3.5"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="relative w-full h-[calc(100%-42px)] overflow-hidden bg-black/60 flex items-center justify-center">
+                            <img src="${screen.url}" 
+                                 onerror="this.src='https://placehold.co/1200x700/0d0e15/ffffff?text=CloudStream+Desktop+Screen+${screen.id}'" 
+                                 alt="${screen.title}" 
+                                 class="w-full h-full object-cover object-top transition-transform duration-700 group-hover:scale-[1.01]" />
+                            
+                            ${offset === 0 ? `
+                                <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-4">
+                                    <div class="flex items-center justify-between">
+                                        <div>
+                                            <p class="text-xs font-mono text-indigo-300">${screen.tag}</p>
+                                            <h4 class="text-sm font-bold text-white">${screen.title}</h4>
+                                        </div>
+                                        <button onclick="event.stopPropagation(); openLightbox('${screen.url}', '${screen.title}')" class="px-3 py-1.5 bg-white text-black text-xs font-bold flex items-center gap-1.5 shadow-xl">
+                                            <i data-lucide="zoom-in" class="w-3.5 h-3.5"></i> Fullscreen
+                                        </button>
+                                    </div>
+                                </div>
+                            ` : `
+                                <div class="absolute inset-0 bg-black/40 group-hover:bg-black/10 transition-colors flex items-center justify-center">
+                                    <span class="px-3 py-1 bg-black/80 text-white font-mono text-[11px] border border-white/20 backdrop-blur-md">
+                                        Click to Bring Screen ${screen.id} to Front
+                                    </span>
+                                </div>
+                            `}
+                        </div>
+                    </div>
+                `;
+            });
+
+            stackHtml += `
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            container.innerHTML = stackHtml;
+            if (window.lucide) lucide.createIcons();
+        }
+
+        function switchView(mode) {
+            const views = ['desktop', 'mobile', 'tv'];
+            views.forEach(v => {
+                const btn = document.getElementById('btn-' + v);
+                if (btn) {
+                    if (v === mode) {
+                        btn.className = 'view-btn px-6 py-2.5 bg-white text-black font-semibold text-xs transition-all shadow-md';
+                    } else {
+                        btn.className = 'view-btn px-6 py-2.5 bg-white/[0.03] hover:bg-white/[0.08] text-gray-400 hover:text-white font-medium text-xs transition-all';
+                    }
+                }
+            });
+
+            const mockupScreen = document.getElementById('mockup-screen');
+
+            if (mode === 'desktop') {
+                mockupScreen.innerHTML = `<div id="desktop-layered-container" class="transition-all"></div>`;
+                renderDesktopLayeredUI();
+            } else if (mode === 'mobile') {
+                mockupScreen.innerHTML = `
+                    <div class="space-y-8">
+                        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-white/10">
+                            <div class="flex items-center gap-3">
+                                <div class="w-2.5 h-2.5 bg-emerald-400 animate-pulse"></div>
+                                <div>
+                                    <h3 class="text-base font-bold text-white flex items-center gap-2">
+                                        Native Android App Interface
+                                    </h3>
+                                    <p class="text-xs text-gray-400">Click any device to view high-resolution screenshot</p>
+                                </div>
+                            </div>
+                            <div class="flex items-center gap-2 font-mono text-xs">
+                                <span class="px-3 py-1 bg-white/[0.05] border border-white/10 text-gray-300">v4.2.0 • Android 5.0+</span>
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-8 lg:gap-10 items-center">
+                            
+                            <div class="group relative flex flex-col items-center cursor-pointer" onclick="openLightbox('https://cdn.ntechbd.app/cloudstream/screen%201.png', 'CloudStream Android - Home & Discovery')">
+                                <div class="relative w-full max-w-[320px] transition-all duration-500 ease-out transform group-hover:-translate-y-3 group-hover:scale-[1.02]">
+                                    <div class="absolute inset-0 bg-indigo-500/20 blur-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                                    <img src="https://cdn.ntechbd.app/cloudstream/screen%201.png" 
+                                         onerror="this.src='https://placehold.co/400x800/10121d/ffffff?text=CloudStream+Screen+1'" 
+                                         alt="CloudStream Android Screen 1" 
+                                         class="w-full h-auto object-contain relative z-10 drop-shadow-[0_20px_35px_rgba(0,0,0,0.8)]" />
+                                    <div class="absolute inset-0 z-20 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                                        <span class="px-4 py-2 bg-white/90 text-black font-bold text-xs shadow-2xl backdrop-blur-md flex items-center gap-2 transform translate-y-2 group-hover:translate-y-0 transition-transform duration-300">
+                                            <i data-lucide="maximize-2" class="w-3.5 h-3.5"></i> Expand View
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="mt-4 text-center">
+                                    <span class="text-[10px] font-mono uppercase tracking-widest text-indigo-400 font-semibold block">Feed & Indexer</span>
+                                    <h4 class="text-sm font-bold text-white mt-0.5">Home & Discovery</h4>
+                                    <p class="text-xs text-gray-400 mt-0.5">Media catalog & continue watching</p>
+                                </div>
+                            </div>
+
+                            <div class="group relative flex flex-col items-center cursor-pointer" onclick="openLightbox('https://cdn.ntechbd.app/cloudstream/screen%202.png', 'CloudStream Android - Details & Metadata')">
+                                <div class="relative w-full max-w-[320px] transition-all duration-500 ease-out transform group-hover:-translate-y-3 group-hover:scale-[1.02]">
+                                    <div class="absolute inset-0 bg-purple-500/20 blur-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                                    <img src="https://cdn.ntechbd.app/cloudstream/screen%202.png" 
+                                         onerror="this.src='https://placehold.co/400x800/10121d/ffffff?text=CloudStream+Screen+2'" 
+                                         alt="CloudStream Android Screen 2" 
+                                         class="w-full h-auto object-contain relative z-10 drop-shadow-[0_20px_35px_rgba(0,0,0,0.8)]" />
+                                    <div class="absolute inset-0 z-20 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                                        <span class="px-4 py-2 bg-white/90 text-black font-bold text-xs shadow-2xl backdrop-blur-md flex items-center gap-2 transform translate-y-2 group-hover:translate-y-0 transition-transform duration-300">
+                                            <i data-lucide="maximize-2" class="w-3.5 h-3.5"></i> Expand View
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="mt-4 text-center">
+                                    <span class="text-[10px] font-mono uppercase tracking-widest text-purple-400 font-semibold block">Search & Info</span>
+                                    <h4 class="text-sm font-bold text-white mt-0.5">Details & Metadata</h4>
+                                    <p class="text-xs text-gray-400 mt-0.5">Source picker, cast & subtitles</p>
+                                </div>
+                            </div>
+
+                            <div class="group relative flex flex-col items-center cursor-pointer" onclick="openLightbox('https://cdn.ntechbd.app/cloudstream/screen%203.png', 'CloudStream Android - Player & Stream Engine')">
+                                <div class="relative w-full max-w-[320px] transition-all duration-500 ease-out transform group-hover:-translate-y-3 group-hover:scale-[1.02]">
+                                    <div class="absolute inset-0 bg-cyan-500/20 blur-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                                    <img src="https://cdn.ntechbd.app/cloudstream/screen%203.png" 
+                                         onerror="this.src='https://placehold.co/400x800/10121d/ffffff?text=CloudStream+Screen+3'" 
+                                         alt="CloudStream Android Screen 3" 
+                                         class="w-full h-auto object-contain relative z-10 drop-shadow-[0_20px_35px_rgba(0,0,0,0.8)]" />
+                                    <div class="absolute inset-0 z-20 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                                        <span class="px-4 py-2 bg-white/90 text-black font-bold text-xs shadow-2xl backdrop-blur-md flex items-center gap-2 transform translate-y-2 group-hover:translate-y-0 transition-transform duration-300">
+                                            <i data-lucide="maximize-2" class="w-3.5 h-3.5"></i> Expand View
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="mt-4 text-center">
+                                    <span class="text-[10px] font-mono uppercase tracking-widest text-cyan-400 font-semibold block">ExoPlayer Core</span>
+                                    <h4 class="text-sm font-bold text-white mt-0.5">Player & Stream Engine</h4>
+                                    <p class="text-xs text-gray-400 mt-0.5">Custom controls & direct mirrors</p>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                `;
+            } else if (mode === 'tv') {
+                mockupScreen.innerHTML = `
+                    <div class="surface-card p-6 border border-white/10">
+                        <div class="space-y-5 relative">
+                            <div class="flex items-center justify-between border-b border-white/10 pb-3">
+                                <div class="flex items-center gap-3">
+                                    <img src="https://avatars.githubusercontent.com/u/110591699?v=4" class="w-8 h-8 object-cover border border-white/20" />
+                                    <span class="font-bold text-white text-base tracking-wider uppercase">Android TV Leanback UI</span>
+                                </div>
+                                <div class="flex items-center gap-3 text-xs font-mono text-gray-400">
+                                    <span class="px-2 py-1 bg-white/10 text-white flex items-center gap-1"><i data-lucide="tv" class="w-3.5 h-3.5"></i> D-Pad Remote Ready</span>
+                                    <span>21:40</span>
+                                </div>
+                            </div>
+
+                            <div class="p-6 bg-gradient-to-r from-indigo-900 via-indigo-950 to-slate-950 border-2 border-indigo-500 shadow-2xl relative">
+                                <div class="absolute top-3 right-3 px-2 py-1 bg-indigo-500 text-white font-mono text-[10px] font-bold tracking-widest">SELECTED ITEM</div>
+                                <span class="text-xs font-mono text-indigo-300 uppercase tracking-widest">Leanback Spotlight</span>
+                                <h3 class="text-2xl font-black text-white mt-1">Oppenheimer</h3>
+                                <p class="text-xs text-gray-300 mt-2 max-w-xl">The story of American scientist J. Robert Oppenheimer and his role in the development of the atomic bomb.</p>
+                                <div class="flex items-center gap-4 mt-5">
+                                    <button class="px-6 py-2.5 bg-white text-black text-xs font-extrabold flex items-center gap-2 ring-4 ring-indigo-400/50">
+                                        <i data-lucide="play" class="w-4 h-4 fill-black"></i> Play Main Feature
+                                    </button>
+                                    <button class="px-4 py-2.5 bg-white/10 text-white text-xs font-bold border border-white/20">
+                                        Episodes & Sources
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }
+            if (window.lucide) lucide.createIcons();
+        }
+
+        // Accordion functionality
+        function toggleFaq(id) {
+            const ans = document.getElementById(`faq-ans-${id}`);
+            const icon = document.getElementById(`faq-icon-${id}`);
+            
+            if (ans && icon) {
+                if (ans.classList.contains('hidden')) {
+                    ans.classList.remove('hidden');
+                    icon.classList.add('rotate-180');
+                } else {
+                    ans.classList.add('hidden');
+                    icon.classList.remove('rotate-180');
+                }
+            }
+        }
+
+        // Modal popup logic
+        function toggleModal(type) {
+            const modal = document.getElementById('info-modal');
+            const title = document.getElementById('modal-title');
+            const body = document.getElementById('modal-body');
+
+            if (!modal) return;
+
+            if (type === 'tv-guide') {
+                if (title) title.innerText = 'Fire TV Installation Guide';
+                if (body) {
+                    body.innerHTML = `
+                        <ol class="list-decimal list-inside space-y-1.5">
+                            <li>Install <strong>Downloader</strong> from your Amazon TV Store.</li>
+                            <li>Open Downloader and enter the direct APK URL.</li>
+                            <li>Click install and allow unknown apps in TV developer options if prompted.</li>
+                        </ol>
+                    `;
+                }
+                modal.classList.remove('hidden');
+            } else if (type === 'mac-guide') {
+                if (title) title.innerText = 'macOS Gatekeeper Instructions';
+                if (body) {
+                    body.innerHTML = `
+                        <p>If macOS blocks launch because of an unidentified developer prompt:</p>
+                        <ul class="list-disc list-inside space-y-1 mt-1.5">
+                            <li>Open <strong>System Settings > Privacy & Security</strong>.</li>
+                            <li>Scroll to Security and click <strong>Open Anyway</strong> for CloudStream.</li>
+                        </ul>
+                    `;
+                }
+                modal.classList.remove('hidden');
+            } else {
+                modal.classList.add('hidden');
+            }
+        }
+
+        // Lightbox image viewer
+        function openLightbox(src, title) {
+            const modal = document.getElementById('lightbox-modal');
+            const img = document.getElementById('lightbox-img');
+            const caption = document.getElementById('lightbox-title');
+
+            if (modal && img && caption) {
+                img.src = src;
+                caption.innerText = title;
+                modal.classList.remove('hidden');
+            }
+        }
+
+        function closeLightbox() {
+            const modal = document.getElementById('lightbox-modal');
+            if (modal) modal.classList.add('hidden');
+        }
+
+        function showToast(msg) {
+            const toast = document.getElementById('toast');
+            const toastMsg = document.getElementById('toast-message');
+            if (toast && toastMsg) {
+                toastMsg.innerText = msg;
+                toast.classList.remove('translate-y-20', 'opacity-0');
+                toast.classList.add('translate-y-0', 'opacity-100');
+
+                setTimeout(() => {
+                    toast.classList.remove('translate-y-0', 'opacity-100');
+                    toast.classList.add('translate-y-20', 'opacity-0');
+                }, 3000);
+            }
+        }
+
+        function copyToClipboard(elementId, btnId) {
+            const el = document.getElementById(elementId);
+            if (!el) return;
+            const text = el.innerText;
+            const textarea = document.createElement('textarea');
+            textarea.value = text;
+            document.body.appendChild(textarea);
+            textarea.select();
+            document.execCommand('copy');
+            document.body.removeChild(textarea);
+
+            const btn = document.getElementById(btnId);
+            if (btn) btn.innerText = 'Copied!';
+            showToast('Repository URL copied to clipboard');
+
+            setTimeout(() => {
+                if (btn) btn.innerText = 'Copy';
+            }, 2500);
+        }
+
+        function downloadApp(platform, url) {
+            const urls = {
+                'Android APK': 'https://cdn.ntechbd.app/cloudstream/app-stable-release.apk',
+                'Desktop Setup': 'https://cdn.ntechbd.app/cloudstream/CloudStream%20Desktop.msi',
+                'Windows Setup': 'https://cdn.ntechbd.app/cloudstream/CloudStream%20Desktop.msi',
+                'Windows Desktop': 'https://cdn.ntechbd.app/cloudstream/CloudStream%20Desktop.msi'
+            };
+            showToast(`Downloading CloudStream (${platform})...`);
+            const targetUrl = url || urls[platform];
+            if (targetUrl && (typeof event === 'undefined' || !event || event.target.tagName !== 'A')) {
+                window.location.href = targetUrl;
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            if (window.lucide) {
+                lucide.createIcons();
+            }
+
+            const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+            const mobileMenu = document.getElementById('mobile-menu');
+            const menuIconOpen = document.getElementById('menu-icon-open');
+            const menuIconClose = document.getElementById('menu-icon-close');
+
+            if (mobileMenuBtn && mobileMenu) {
+                mobileMenuBtn.addEventListener('click', () => {
+                    const isOpen = mobileMenu.classList.contains('hidden');
+                    if (isOpen) {
+                        mobileMenu.classList.remove('hidden');
+                        menuIconOpen?.classList.add('hidden');
+                        menuIconClose?.classList.remove('hidden');
+                    } else {
+                        mobileMenu.classList.add('hidden');
+                        menuIconOpen?.classList.remove('hidden');
+                        menuIconClose?.classList.add('hidden');
+                    }
+                });
+
+                document.querySelectorAll('.mobile-nav-link').forEach(link => {
+                    link.addEventListener('click', () => {
+                        mobileMenu.classList.add('hidden');
+                        menuIconOpen?.classList.remove('hidden');
+                        menuIconClose?.classList.add('hidden');
+                    });
+                });
+            }
+
+            switchView('desktop');
+        });
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                closeLightbox();
+                toggleModal();
+            }
+        });
+    </script>
+</body>
+</html>
