@@ -223,7 +223,7 @@
                     </div>
                 </a>
                 
-                <a href="https://cdn.ntechbd.app/cloudstream/CloudStream%20Desktop.msi" onclick="downloadApp('Desktop Setup')" class="w-full sm:w-1/2 px-6 py-4 bg-white/[0.08] hover:bg-white/[0.14] text-white font-bold text-sm transition-all flex items-center justify-center gap-3.5 active:scale-95 group border-0">
+                <a href="https://pub-a06300a664b74991ac75dcfb3e99c047.r2.dev/CloudStream%20Desktop.msi" onclick="downloadApp('Desktop Setup')" class="w-full sm:w-1/2 px-6 py-4 bg-white/[0.08] hover:bg-white/[0.14] text-white font-bold text-sm transition-all flex items-center justify-center gap-3.5 active:scale-95 group border-0">
                     <i data-lucide="monitor" class="w-5 h-5 text-indigo-400 shrink-0"></i>
                     <div class="text-left leading-tight">
                         <div class="text-[10px] uppercase font-mono tracking-wider text-gray-400 font-semibold">Windows / Mac / Linux</div>
@@ -455,7 +455,7 @@
                         <div class="mt-6 space-y-2 text-xs font-mono text-gray-400">
                             <div class="flex justify-between py-1 border-b border-white/[0.04]">
                                 <span>Package</span>
-                                <span class="text-gray-300">Installer (.msi)</span>
+                                <span class="text-gray-300">Installer (.msi) & Standalone (.exe)</span>
                             </div>
                             <div class="flex justify-between py-1 border-b border-white/[0.04]">
                                 <span>Version</span>
@@ -469,11 +469,11 @@
                     </div>
 
                     <div class="mt-8 space-y-2">
-                        <a href="https://cdn.ntechbd.app/cloudstream/CloudStream%20Desktop.msi" onclick="downloadApp('Windows Setup')" class="w-full py-2.5 bg-white hover:bg-gray-100 text-black font-semibold text-xs transition-all flex items-center justify-center gap-2 active:scale-95">
+                        <a href="https://pub-a06300a664b74991ac75dcfb3e99c047.r2.dev/CloudStream%20Desktop.msi" onclick="downloadApp('Windows Setup (.msi)')" class="w-full py-2.5 bg-white hover:bg-gray-100 text-black font-semibold text-xs transition-all flex items-center justify-center gap-2 active:scale-95">
                             <i data-lucide="download" class="w-3.5 h-3.5"></i> Download Setup (.msi)
                         </a>
-                        <a href="https://cdn.ntechbd.app/cloudstream/CloudStream%20Desktop.msi" onclick="downloadApp('Windows Desktop')" class="w-full py-2 text-[11px] text-gray-400 hover:text-white transition-colors block text-center">
-                            Direct Link (.msi)
+                        <a href="https://pub-a06300a664b74991ac75dcfb3e99c047.r2.dev/CloudStream%20Desktop.exe" onclick="downloadApp('Windows Standalone (.exe)')" class="w-full py-2.5 bg-white/[0.08] hover:bg-white/[0.14] text-white font-semibold text-xs transition-all flex items-center justify-center gap-2 active:scale-95">
+                            <i data-lucide="download" class="w-3.5 h-3.5 text-blue-400"></i> Download Standalone (.exe)
                         </a>
                     </div>
                 </div>
@@ -662,7 +662,7 @@
                         <span>Does CloudStream host any media content?</span>
                         <i data-lucide="chevron-down" id="faq-icon-3" class="w-4 h-4 text-gray-400 transition-transform"></i>
                     </button>
-                    <div id="faq-ans-3" class="hidden px-5 pb-5 text-xs text-gray-400 leading-relaxed pt-2 border-t border-white/[0.04]">
+                    <div id="faq-ans-2" class="hidden px-5 pb-5 text-xs text-gray-400 leading-relaxed pt-2 border-t border-white/[0.04]">
                         No. CloudStream does not host, store, or stream video content from its servers. It operates strictly as an indexing media hub based on user-added extensions.
                     </div>
                 </div>
@@ -1186,9 +1186,11 @@
         function downloadApp(platform, url) {
             const urls = {
                 'Android APK': 'https://cdn.ntechbd.app/cloudstream/app-stable-release.apk',
-                'Desktop Setup': 'https://cdn.ntechbd.app/cloudstream/CloudStream%20Desktop.msi',
-                'Windows Setup': 'https://cdn.ntechbd.app/cloudstream/CloudStream%20Desktop.msi',
-                'Windows Desktop': 'https://cdn.ntechbd.app/cloudstream/CloudStream%20Desktop.msi'
+                'Desktop Setup': 'https://pub-a06300a664b74991ac75dcfb3e99c047.r2.dev/CloudStream%20Desktop.msi',
+                'Windows Setup': 'https://pub-a06300a664b74991ac75dcfb3e99c047.r2.dev/CloudStream%20Desktop.msi',
+                'Windows Setup (.msi)': 'https://pub-a06300a664b74991ac75dcfb3e99c047.r2.dev/CloudStream%20Desktop.msi',
+                'Windows Desktop': 'https://pub-a06300a664b74991ac75dcfb3e99c047.r2.dev/CloudStream%20Desktop.msi',
+                'Windows Standalone (.exe)': 'https://pub-a06300a664b74991ac75dcfb3e99c047.r2.dev/CloudStream%20Desktop.exe'
             };
             showToast(`Downloading CloudStream (${platform})...`);
             const targetUrl = url || urls[platform];
