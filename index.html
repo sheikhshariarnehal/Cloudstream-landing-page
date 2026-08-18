@@ -226,7 +226,7 @@
                 <a href="https://pub-a06300a664b74991ac75dcfb3e99c047.r2.dev/CloudStream%20Desktop.msi" onclick="downloadApp('Desktop Setup')" class="w-full sm:w-1/2 px-6 py-4 bg-white/[0.08] hover:bg-white/[0.14] text-white font-bold text-sm transition-all flex items-center justify-center gap-3.5 active:scale-95 group border-0">
                     <i data-lucide="monitor" class="w-5 h-5 text-indigo-400 shrink-0"></i>
                     <div class="text-left leading-tight">
-                        <div class="text-[10px] uppercase font-mono tracking-wider text-gray-400 font-semibold">Windows / Mac / Linux</div>
+                        <div class="text-[10px] uppercase font-mono tracking-wider text-gray-400 font-semibold">Windows (64-bit)</div>
                         <div class="text-sm font-bold text-white flex items-center gap-1.5 mt-0.5">
                             <span>Download Desktop</span>
                             <i data-lucide="arrow-down" class="w-3.5 h-3.5 text-indigo-400 group-hover:translate-y-0.5 transition-transform"></i>
@@ -260,11 +260,11 @@
                 </div>
                 <div class="flex items-center gap-2">
                     <i data-lucide="laptop" class="w-4 h-4 text-purple-400"></i>
-                    <span>macOS (Apple & Intel)</span>
+                    <span>macOS (Coming Soon)</span>
                 </div>
                 <div class="flex items-center gap-2">
                     <i data-lucide="terminal" class="w-4 h-4 text-amber-400"></i>
-                    <span>Linux AppImage/Flatpak</span>
+                    <span>Linux (Coming Soon)</span>
                 </div>
             </div>
 
@@ -479,13 +479,13 @@
                 </div>
 
                 <!-- macOS -->
-                <div class="surface-card p-6 flex flex-col justify-between">
+                <div class="surface-card p-6 flex flex-col justify-between opacity-85 hover:opacity-100 transition-opacity">
                     <div>
                         <div class="flex items-center justify-between mb-6">
                             <div class="w-10 h-10 bg-purple-500/10 text-purple-400 flex items-center justify-center">
                                 <i data-lucide="laptop" class="w-5 h-5"></i>
                             </div>
-                            <span class="text-[10px] font-mono px-2 py-0.5 bg-purple-500/10 text-purple-400 font-medium">Universal</span>
+                            <span class="text-[10px] font-mono px-2 py-0.5 bg-purple-500/15 text-purple-400 font-semibold uppercase tracking-wider">Coming Soon</span>
                         </div>
                         <h3 class="text-lg font-semibold text-white">macOS</h3>
                         <p class="text-xs text-gray-400 mt-1">Apple Silicon & Intel Mac</p>
@@ -493,37 +493,37 @@
                         <div class="mt-6 space-y-2 text-xs font-mono text-gray-400">
                             <div class="flex justify-between py-1 border-b border-white/[0.04]">
                                 <span>Arch</span>
-                                <span class="text-gray-300">Arm64 / x64</span>
+                                <span class="text-gray-300">Universal (Arm64 / x64)</span>
                             </div>
                             <div class="flex justify-between py-1 border-b border-white/[0.04]">
-                                <span>Version</span>
-                                <span class="text-gray-300">1.8.2</span>
+                                <span>Status</span>
+                                <span class="text-purple-400 font-medium">In Development</span>
                             </div>
                             <div class="flex justify-between py-1">
-                                <span>Size</span>
-                                <span class="text-gray-300">72.8 MB</span>
+                                <span>Package</span>
+                                <span class="text-gray-300">DMG Installer</span>
                             </div>
                         </div>
                     </div>
 
                     <div class="mt-8 space-y-2">
-                        <button onclick="downloadApp('macOS DMG')" class="w-full py-2.5 bg-white hover:bg-gray-100 text-black font-semibold text-xs transition-all flex items-center justify-center gap-2 active:scale-95">
-                            <i data-lucide="download" class="w-3.5 h-3.5"></i> Download DMG
+                        <button disabled class="w-full py-2.5 bg-white/[0.05] text-gray-400 font-semibold text-xs transition-all flex items-center justify-center gap-2 cursor-not-allowed border border-white/[0.08]">
+                            <i data-lucide="clock" class="w-3.5 h-3.5 text-purple-400"></i> Coming Soon
                         </button>
-                        <button onclick="toggleModal('mac-guide')" class="w-full py-2 text-[11px] text-gray-400 hover:text-white transition-colors">
-                            macOS Gatekeeper Tip
-                        </button>
+                        <span class="w-full py-2 text-[11px] text-gray-500 block text-center">
+                            DMG build in preparation
+                        </span>
                     </div>
                 </div>
 
                 <!-- Linux -->
-                <div class="surface-card p-6 flex flex-col justify-between">
+                <div class="surface-card p-6 flex flex-col justify-between opacity-85 hover:opacity-100 transition-opacity">
                     <div>
                         <div class="flex items-center justify-between mb-6">
                             <div class="w-10 h-10 bg-amber-500/10 text-amber-400 flex items-center justify-center">
                                 <i data-lucide="terminal" class="w-5 h-5"></i>
                             </div>
-                            <span class="text-[10px] font-mono px-2 py-0.5 bg-amber-500/10 text-amber-400 font-medium">Linux</span>
+                            <span class="text-[10px] font-mono px-2 py-0.5 bg-amber-500/15 text-amber-400 font-semibold uppercase tracking-wider">Coming Soon</span>
                         </div>
                         <h3 class="text-lg font-semibold text-white">Linux</h3>
                         <p class="text-xs text-gray-400 mt-1">Ubuntu, Arch, Fedora</p>
@@ -534,23 +534,23 @@
                                 <span class="text-gray-300">AppImage / Flatpak</span>
                             </div>
                             <div class="flex justify-between py-1 border-b border-white/[0.04]">
-                                <span>Version</span>
-                                <span class="text-gray-300">1.8.2</span>
+                                <span>Status</span>
+                                <span class="text-amber-400 font-medium">In Development</span>
                             </div>
                             <div class="flex justify-between py-1">
-                                <span>Size</span>
-                                <span class="text-gray-300">58.1 MB</span>
+                                <span>Package</span>
+                                <span class="text-gray-300">Standalone Binary</span>
                             </div>
                         </div>
                     </div>
 
                     <div class="mt-8 space-y-2">
-                        <button onclick="downloadApp('Linux AppImage')" class="w-full py-2.5 bg-white hover:bg-gray-100 text-black font-semibold text-xs transition-all flex items-center justify-center gap-2 active:scale-95">
-                            <i data-lucide="download" class="w-3.5 h-3.5"></i> Download AppImage
+                        <button disabled class="w-full py-2.5 bg-white/[0.05] text-gray-400 font-semibold text-xs transition-all flex items-center justify-center gap-2 cursor-not-allowed border border-white/[0.08]">
+                            <i data-lucide="clock" class="w-3.5 h-3.5 text-amber-400"></i> Coming Soon
                         </button>
-                        <button onclick="downloadApp('Linux Flatpak')" class="w-full py-2 text-[11px] text-gray-400 hover:text-white transition-colors">
-                            Install via Flatpak
-                        </button>
+                        <span class="w-full py-2 text-[11px] text-gray-500 block text-center">
+                            AppImage & Flatpak in progress
+                        </span>
                     </div>
                 </div>
 
