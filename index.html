@@ -188,83 +188,55 @@
     <!-- Hero Section -->
     <section class="relative pt-36 pb-20 md:pt-48 md:pb-32 overflow-hidden bg-radial-gradient">
         <!-- Ambient Glow -->
-        <div class="absolute top-0 left-1/2 -translate-x-1/2 w-[1000px] h-[500px] bg-indigo-600/10 blur-[140px] pointer-events-none animate-pulse-slow"></div>
-        <div class="absolute top-10 left-1/2 -translate-x-1/2 w-full max-w-7xl h-full bg-grid-pattern opacity-30 pointer-events-none"></div>
+        <div class="absolute top-0 left-1/2 -translate-x-1/2 w-[1000px] h-[500px] bg-indigo-600/10 blur-[140px] pointer-events-none"></div>
 
         <div class="max-w-7xl mx-auto px-6 lg:px-12 relative z-10 text-center">
             
-            <div class="inline-flex items-center gap-2 px-3.5 py-1.5 bg-white/[0.04] text-xs font-medium text-gray-300 mb-8 hover:bg-white/[0.08] transition-all cursor-pointer">
-                <span class="w-1.5 h-1.5 bg-emerald-400"></span>
-                <span class="text-gray-300">CloudStream 4.2 Release</span>
-                <span class="text-gray-500">•</span>
-                <span class="text-indigo-400 font-medium flex items-center gap-1">What's new <i data-lucide="arrow-right" class="w-3 h-3"></i></span>
-            </div>
-
-            <h1 class="text-4xl sm:text-6xl lg:text-7xl font-extrabold tracking-tight text-white max-w-4xl mx-auto leading-[1.08]">
-                Stream without limit. <br/>
-                <span class="text-transparent bg-clip-text bg-gradient-to-r from-gray-200 via-gray-400 to-gray-600">
-                    Zero ads. Modern interface.
-                </span>
+            <h1 class="text-5xl sm:text-6xl lg:text-7xl font-extrabold tracking-[-0.03em] text-white max-w-4xl mx-auto leading-[1.08]">
+                Stream without limit.<br>
+                <span class="text-zinc-400 font-bold">Zero ads. Modern interface.</span>
             </h1>
 
-            <p class="mt-6 text-base sm:text-lg text-gray-400 max-w-2xl mx-auto font-normal leading-relaxed">
-                The open-source, modular media player & stream indexer for Android, Android TV, Windows, macOS, and Linux. Built for speed, privacy, and full customizability.
+            <p class="mt-6 text-base sm:text-lg text-zinc-400 max-w-2xl mx-auto font-normal leading-relaxed">
+                The open-source media player and stream indexer. Built for pure speed, total privacy, and endless extensibility.
             </p>
 
-            <div class="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4 max-w-xl mx-auto">
-                <a href="https://pub-e9a64ec2e4424ee6b04d9dac6a883b3b.r2.dev/goplay.apk" onclick="downloadApp('Android APK')" class="w-full sm:w-1/2 px-6 py-4 bg-white text-black font-bold text-sm hover:bg-gray-100 transition-all flex items-center justify-center gap-3.5 shadow-xl shadow-white/10 active:scale-95 group">
-                    <i data-lucide="smartphone" class="w-5 h-5 text-black shrink-0"></i>
-                    <div class="text-left leading-tight">
-                        <div class="text-[10px] uppercase font-mono tracking-wider text-gray-500 font-semibold">Android / Fire TV</div>
-                        <div class="text-sm font-bold text-black flex items-center gap-1.5 mt-0.5">
-                            <span>Download APK</span>
-                            <i data-lucide="arrow-down" class="w-3.5 h-3.5 group-hover:translate-y-0.5 transition-transform"></i>
-                        </div>
-                    </div>
+            <div class="mt-10 flex flex-col sm:flex-row items-center justify-center gap-3.5 max-w-md mx-auto">
+                <a href="https://pub-e9a64ec2e4424ee6b04d9dac6a883b3b.r2.dev/goplay.apk" onclick="downloadApp('Android APK')" class="w-full sm:w-auto px-7 py-3.5 bg-white hover:bg-zinc-100 text-black font-semibold text-sm transition-all inline-flex items-center justify-center gap-2.5 shadow-xl shadow-white/10 active:scale-95 group">
+                    <i data-lucide="download" class="w-4 h-4 text-black group-hover:translate-y-0.5 transition-transform"></i>
+                    <span>Download APK</span>
+                    <span class="text-xs text-zinc-500 font-normal">v4.2</span>
                 </a>
                 
-                <a href="https://pub-a06300a664b74991ac75dcfb3e99c047.r2.dev/CloudStream%20Desktop.msi" onclick="downloadApp('Desktop Setup')" class="w-full sm:w-1/2 px-6 py-4 bg-white/[0.08] hover:bg-white/[0.14] text-white font-bold text-sm transition-all flex items-center justify-center gap-3.5 active:scale-95 group border-0">
-                    <i data-lucide="monitor" class="w-5 h-5 text-indigo-400 shrink-0"></i>
-                    <div class="text-left leading-tight">
-                        <div class="text-[10px] uppercase font-mono tracking-wider text-gray-400 font-semibold">Windows (64-bit)</div>
-                        <div class="text-sm font-bold text-white flex items-center gap-1.5 mt-0.5">
-                            <span>Download Desktop</span>
-                            <i data-lucide="arrow-down" class="w-3.5 h-3.5 text-indigo-400 group-hover:translate-y-0.5 transition-transform"></i>
-                        </div>
-                    </div>
+                <a href="https://pub-a06300a664b74991ac75dcfb3e99c047.r2.dev/CloudStream%20Desktop.msi" onclick="downloadApp('Desktop Setup')" class="w-full sm:w-auto px-6 py-3.5 bg-white/[0.06] hover:bg-white/[0.12] text-white font-medium text-sm border border-white/10 transition-all inline-flex items-center justify-center gap-2.5 active:scale-95 group">
+                    <i data-lucide="monitor" class="w-4 h-4 text-zinc-400 group-hover:text-white transition-colors"></i>
+                    <span>Windows Desktop</span>
                 </a>
             </div>
 
-            <div class="mt-4 flex items-center justify-center gap-6 text-xs text-gray-500">
-                <a href="#download" class="hover:text-gray-300 transition-colors flex items-center gap-1">
-                    <i data-lucide="layers" class="w-3.5 h-3.5"></i> All builds & checksums
-                </a>
-                <span>•</span>
-                <a href="#preview" class="hover:text-gray-300 transition-colors flex items-center gap-1">
-                    <i data-lucide="eye" class="w-3.5 h-3.5"></i> Live UI Preview
+            <div class="mt-4 flex items-center justify-center text-xs text-zinc-500">
+                <a href="#download" class="hover:text-zinc-300 transition-colors inline-flex items-center gap-1.5">
+                    <span>All platforms, Fire TV & checksums</span>
+                    <i data-lucide="arrow-right" class="w-3 h-3"></i>
                 </a>
             </div>
 
-            <div class="mt-14 pt-8 border-t border-white/[0.05] flex items-center justify-center gap-6 sm:gap-10 text-xs font-mono text-gray-400 flex-wrap">
+            <div class="mt-14 pt-8 border-t border-white/[0.06] flex items-center justify-center gap-6 sm:gap-10 text-xs text-zinc-400 flex-wrap">
                 <div class="flex items-center gap-2">
-                    <i data-lucide="smartphone" class="w-4 h-4 text-emerald-400"></i>
+                    <i data-lucide="smartphone" class="w-4 h-4 text-zinc-400"></i>
                     <span>Android 5.0+</span>
                 </div>
                 <div class="flex items-center gap-2">
-                    <i data-lucide="tv" class="w-4 h-4 text-indigo-400"></i>
-                    <span>Fire TV / Android TV</span>
+                    <i data-lucide="tv" class="w-4 h-4 text-zinc-400"></i>
+                    <span>Fire TV & Android TV</span>
                 </div>
                 <div class="flex items-center gap-2">
-                    <i data-lucide="monitor" class="w-4 h-4 text-blue-400"></i>
+                    <i data-lucide="monitor" class="w-4 h-4 text-zinc-400"></i>
                     <span>Windows 10 / 11</span>
                 </div>
-                <div class="flex items-center gap-2">
-                    <i data-lucide="laptop" class="w-4 h-4 text-purple-400"></i>
-                    <span>macOS (Coming Soon)</span>
-                </div>
-                <div class="flex items-center gap-2">
-                    <i data-lucide="terminal" class="w-4 h-4 text-amber-400"></i>
-                    <span>Linux (Coming Soon)</span>
+                <div class="flex items-center gap-2 text-zinc-500">
+                    <i data-lucide="laptop" class="w-4 h-4 text-zinc-500"></i>
+                    <span>macOS & Linux (Soon)</span>
                 </div>
             </div>
 
@@ -274,18 +246,12 @@
     <!-- Interactive App Preview Showcase (Tailored Experience) -->
     <section id="preview" class="py-20 relative bg-black/40 border-y border-white/[0.05]">
         <div class="max-w-7xl mx-auto px-6 lg:px-12">
-            
-            <div class="text-center max-w-2xl mx-auto mb-10">
-                <h2 class="text-xs font-mono uppercase tracking-widest text-indigo-400">Tailored Experience</h2>
-                <p class="text-3xl font-bold text-white mt-2 tracking-tight">Designed for Every Display</p>
-                <p class="text-sm text-gray-400 mt-2">Explore desktop layered interface alongside mobile and TV screens.</p>
-            </div>
 
             <!-- Segmented Control Tab Switcher -->
             <div class="flex justify-center mb-10">
                 <div class="inline-flex bg-[#0d0e15] p-1.5 border border-white/10 font-mono text-xs shadow-2xl">
                     <button onclick="switchView('desktop')" id="btn-desktop" class="view-btn px-6 py-2.5 bg-white text-black font-semibold text-xs transition-all shadow-md">
-                        Desktop Layered UI
+                        Desktop UI
                     </button>
                     <button onclick="switchView('mobile')" id="btn-mobile" class="view-btn px-6 py-2.5 bg-white/[0.03] hover:bg-white/[0.08] text-gray-400 hover:text-white font-medium text-xs transition-all">
                         Android Mobile
@@ -455,7 +421,7 @@
                         <div class="mt-6 space-y-2 text-xs font-mono text-gray-400">
                             <div class="flex justify-between py-1 border-b border-white/[0.04]">
                                 <span>Package</span>
-                                <span class="text-gray-300">Installer (.msi) & Standalone (.exe)</span>
+                                <span class="text-gray-300">Windows Installer (.exe)</span>
                             </div>
                             <div class="flex justify-between py-1 border-b border-white/[0.04]">
                                 <span>Version</span>
@@ -469,11 +435,8 @@
                     </div>
 
                     <div class="mt-8 space-y-2">
-                        <a href="https://pub-a06300a664b74991ac75dcfb3e99c047.r2.dev/CloudStream%20Desktop.msi" onclick="downloadApp('Windows Setup (.msi)')" class="w-full py-2.5 bg-white hover:bg-gray-100 text-black font-semibold text-xs transition-all flex items-center justify-center gap-2 active:scale-95">
-                            <i data-lucide="download" class="w-3.5 h-3.5"></i> Download Setup (.msi)
-                        </a>
-                        <a href="https://pub-a06300a664b74991ac75dcfb3e99c047.r2.dev/CloudStream%20Desktop.exe" onclick="downloadApp('Windows Standalone (.exe)')" class="w-full py-2.5 bg-white/[0.08] hover:bg-white/[0.14] text-white font-semibold text-xs transition-all flex items-center justify-center gap-2 active:scale-95">
-                            <i data-lucide="download" class="w-3.5 h-3.5 text-blue-400"></i> Download Standalone (.exe)
+                        <a href="https://pub-a06300a664b74991ac75dcfb3e99c047.r2.dev/CloudStream%20Desktop.exe" onclick="downloadApp('Windows Setup (.exe)')" class="w-full py-2.5 bg-white hover:bg-gray-100 text-black font-semibold text-xs transition-all flex items-center justify-center gap-2 active:scale-95">
+                            <i data-lucide="download" class="w-3.5 h-3.5"></i> Download Setup (.exe)
                         </a>
                     </div>
                 </div>
@@ -756,187 +719,34 @@
     </div>
 
     <script>
-        // Desktop Screen Images Data Stack
-        const pcDesktopScreens = [
-            {
-                id: 1,
-                title: "CloudStream PC - Media Feed & Discovery",
-                tag: "Screen 01 • Main Dashboard",
-                desc: "Discover trending media, indexed sources & continue watching history.",
-                url: "https://cdn.ntechbd.app/cloudstream/PC/SCREEN%20(1).png"
-            },
-            {
-                id: 2,
-                title: "CloudStream PC - Movie & Series Hub",
-                tag: "Screen 02 • Content Catalog",
-                desc: "Filter media categories, high bitrate stream pickers & repository providers.",
-                url: "https://cdn.ntechbd.app/cloudstream/PC/SCREEN%20(2).png"
-            },
-            {
-                id: 3,
-                title: "CloudStream PC - Metadata & Source Selector",
-                tag: "Screen 03 • Details & Cast",
-                desc: "Comprehensive metadata, episode lists, multi-language audio & external player mirrors.",
-                url: "https://cdn.ntechbd.app/cloudstream/PC/SCREEN%20(3).png"
-            },
-            {
-                id: 4,
-                title: "CloudStream PC - Player & Hardware Decoder Engine",
-                tag: "Screen 04 • Cinema Player",
-                desc: "Integrated playback core with subtitles, GPU hardware acceleration & custom shaders.",
-                url: "https://cdn.ntechbd.app/cloudstream/PC/SCREEN%20(4).png"
-            }
-        ];
+        // Desktop Screen Showcase
+        function renderDesktopUI() {
+            const mockupScreen = document.getElementById('mockup-screen');
+            if (!mockupScreen) return;
 
-        let activeDesktopIndex = 0;
-
-        // Bring desktop screen card to front of stack with sliding animation
-        function bringDesktopToFront(index) {
-            if (activeDesktopIndex === index) return;
-            activeDesktopIndex = index;
-            renderDesktopLayeredUI(true);
-        }
-
-        function nextDesktopSlide() {
-            activeDesktopIndex = (activeDesktopIndex + 1) % pcDesktopScreens.length;
-            renderDesktopLayeredUI(true);
-        }
-
-        function prevDesktopSlide() {
-            activeDesktopIndex = (activeDesktopIndex - 1 + pcDesktopScreens.length) % pcDesktopScreens.length;
-            renderDesktopLayeredUI(true);
-        }
-
-        function renderDesktopLayeredUI(isAnimated = false) {
-            const container = document.getElementById('desktop-layered-container');
-            if (!container) return;
-
-            const currentScreen = pcDesktopScreens[activeDesktopIndex];
-
-            let stackHtml = `
+            mockupScreen.innerHTML = `
                 <div class="space-y-6">
-                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-white/10">
-                        <div class="flex items-center gap-3">
-                            <div class="w-2.5 h-2.5 bg-indigo-400 animate-pulse"></div>
-                            <div>
-                                <h3 class="text-base font-bold text-white flex items-center gap-2">
-                                    Desktop Layered Experience
-                                    <span class="text-xs font-mono text-indigo-400 font-normal">(${activeDesktopIndex + 1} / ${pcDesktopScreens.length})</span>
-                                </h3>
-                                <p class="text-xs text-gray-400 mt-0.5">${currentScreen.title.split(' - ')[1] || currentScreen.title} — ${currentScreen.desc}</p>
-                            </div>
-                        </div>
-                        
-                        <div class="flex items-center gap-3 font-mono text-xs self-start sm:self-center">
-                            <div class="flex items-center gap-1.5 mr-2">
-                                ${pcDesktopScreens.map((_, idx) => `
-                                    <button onclick="bringDesktopToFront(${idx})" 
-                                            class="h-1.5 transition-all ${activeDesktopIndex === idx ? 'w-6 bg-indigo-500' : 'w-2 bg-white/20 hover:bg-white/40'}"
-                                            title="Go to Screen ${idx + 1}"></button>
-                                `).join('')}
-                            </div>
 
-                            <div class="flex items-center gap-1 border border-white/10 bg-white/[0.03] p-1">
-                                <button onclick="prevDesktopSlide()" class="p-1.5 hover:bg-white/10 text-gray-300 hover:text-white transition-colors" title="Previous Screen">
-                                    <i data-lucide="chevron-left" class="w-4 h-4"></i>
-                                </button>
-                                <button onclick="nextDesktopSlide()" class="p-1.5 hover:bg-white/10 text-gray-300 hover:text-white transition-colors" title="Next Screen">
-                                    <i data-lucide="chevron-right" class="w-4 h-4"></i>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
 
-                    <div class="relative min-h-[380px] sm:min-h-[500px] md:min-h-[560px] perspective-container flex items-center justify-center py-2">
-                        <div class="relative w-full max-w-4xl h-[320px] sm:h-[450px] md:h-[490px] flex items-center justify-center">
-            `;
+                    <div class="relative group cursor-pointer flex items-center justify-center py-2 sm:py-6" onclick="openLightbox('screen.png', 'CloudStream Desktop - Modern Interface')">
+                        <!-- Dynamic backglow matching the screen device bezel -->
+                        <div class="absolute inset-0 max-w-4xl mx-auto bg-gradient-to-r from-indigo-600/20 via-purple-600/25 to-pink-500/20 blur-3xl opacity-60 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none"></div>
 
-            pcDesktopScreens.forEach((screen, idx) => {
-                const offset = (idx - activeDesktopIndex + pcDesktopScreens.length) % pcDesktopScreens.length;
-                
-                let transformStyle = '';
-                let zIndex = 10 - offset;
-                let opacity = 1;
-                let shadow = 'shadow-2xl';
-                let filter = 'none';
-
-                if (offset === 0) {
-                    transformStyle = 'translate3d(0, 0, 0) scale(1) rotateX(0deg)';
-                    zIndex = 40;
-                    shadow = 'shadow-[0_25px_60px_-15px_rgba(99,102,241,0.4)] border-indigo-500/40';
-                } else if (offset === 1) {
-                    transformStyle = 'translate3d(36px, -24px, -60px) scale(0.92) rotate(1.8deg)';
-                    opacity = 0.75;
-                    filter = 'brightness(0.7)';
-                } else if (offset === 2) {
-                    transformStyle = 'translate3d(-36px, -48px, -120px) scale(0.84) rotate(-1.8deg)';
-                    opacity = 0.55;
-                    filter = 'brightness(0.5)';
-                } else if (offset === 3) {
-                    transformStyle = 'translate3d(0px, -72px, -180px) scale(0.76)';
-                    opacity = 0.35;
-                    filter = 'brightness(0.3)';
-                }
-
-                const animationClass = (offset === 0 && isAnimated) ? 'animate-slide-in' : '';
-
-                stackHtml += `
-                    <div onclick="bringDesktopToFront(${idx})" 
-                         class="desktop-layer-card absolute inset-0 w-full h-full surface-card border border-white/20 p-2 sm:p-3 overflow-hidden ${shadow} cursor-pointer group ${animationClass}"
-                         style="transform: ${transformStyle}; z-index: ${zIndex}; opacity: ${opacity}; filter: ${filter};">
-                        
-                        <div class="bg-[#0b0d14] px-3 py-2 border-b border-white/10 flex items-center justify-between mb-2">
-                            <div class="flex items-center gap-2">
-                                <div class="w-2.5 h-2.5 rounded-full bg-red-500/80"></div>
-                                <div class="w-2.5 h-2.5 rounded-full bg-yellow-500/80"></div>
-                                <div class="w-2.5 h-2.5 rounded-full bg-green-500/80"></div>
-                                <span class="text-[10px] font-mono text-gray-400 ml-2 truncate max-w-[200px] sm:max-w-xs">${screen.tag}</span>
-                            </div>
-                            <div class="flex items-center gap-3">
-                                <span class="text-[10px] font-mono text-indigo-400 bg-indigo-500/10 px-2 py-0.5 border border-indigo-500/20 hidden sm:inline-block">PC Desktop v4.2</span>
-                                <button onclick="event.stopPropagation(); openLightbox('${screen.url}', '${screen.title}')" class="text-gray-400 hover:text-white transition-colors" title="Expand High-Res Screen">
-                                    <i data-lucide="maximize-2" class="w-3.5 h-3.5"></i>
-                                </button>
-                            </div>
-                        </div>
-
-                        <div class="relative w-full h-[calc(100%-42px)] overflow-hidden bg-black/60 flex items-center justify-center">
-                            <img src="${screen.url}" 
-                                 onerror="this.src='https://placehold.co/1200x700/0d0e15/ffffff?text=CloudStream+Desktop+Screen+${screen.id}'" 
-                                 alt="${screen.title}" 
-                                 class="w-full h-full object-cover object-top transition-transform duration-700 group-hover:scale-[1.01]" />
+                        <div class="relative z-10 max-w-5xl w-full transition-all duration-500 ease-out group-hover:scale-[1.015] group-hover:-translate-y-1">
+                            <img src="screen.png" 
+                                 alt="CloudStream Desktop Interface" 
+                                 class="w-full h-auto object-contain mx-auto drop-shadow-[0_25px_60px_rgba(0,0,0,0.85)]" />
                             
-                            ${offset === 0 ? `
-                                <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-4">
-                                    <div class="flex items-center justify-between">
-                                        <div>
-                                            <p class="text-xs font-mono text-indigo-300">${screen.tag}</p>
-                                            <h4 class="text-sm font-bold text-white">${screen.title}</h4>
-                                        </div>
-                                        <button onclick="event.stopPropagation(); openLightbox('${screen.url}', '${screen.title}')" class="px-3 py-1.5 bg-white text-black text-xs font-bold flex items-center gap-1.5 shadow-xl">
-                                            <i data-lucide="zoom-in" class="w-3.5 h-3.5"></i> Fullscreen
-                                        </button>
-                                    </div>
-                                </div>
-                            ` : `
-                                <div class="absolute inset-0 bg-black/40 group-hover:bg-black/10 transition-colors flex items-center justify-center">
-                                    <span class="px-3 py-1 bg-black/80 text-white font-mono text-[11px] border border-white/20 backdrop-blur-md">
-                                        Click to Bring Screen ${screen.id} to Front
-                                    </span>
-                                </div>
-                            `}
-                        </div>
-                    </div>
-                `;
-            });
-
-            stackHtml += `
+                            <div class="absolute inset-0 z-20 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none">
+                                <span class="px-4 py-2 bg-white/95 text-black font-bold text-xs shadow-2xl backdrop-blur-md flex items-center gap-2 transform translate-y-2 group-hover:translate-y-0 transition-transform duration-300">
+                                    <i data-lucide="maximize-2" class="w-3.5 h-3.5"></i> Expand High-Res Screen
+                                </span>
+                            </div>
                         </div>
                     </div>
                 </div>
             `;
 
-            container.innerHTML = stackHtml;
             if (window.lucide) lucide.createIcons();
         }
 
@@ -956,8 +766,7 @@
             const mockupScreen = document.getElementById('mockup-screen');
 
             if (mode === 'desktop') {
-                mockupScreen.innerHTML = `<div id="desktop-layered-container" class="transition-all"></div>`;
-                renderDesktopLayeredUI();
+                renderDesktopUI();
             } else if (mode === 'mobile') {
                 mockupScreen.innerHTML = `
                     <div class="space-y-8">
@@ -1186,11 +995,10 @@
         function downloadApp(platform, url) {
             const urls = {
                 'Android APK': 'https://pub-e9a64ec2e4424ee6b04d9dac6a883b3b.r2.dev/goplay.apk',
-                'Desktop Setup': 'https://pub-a06300a664b74991ac75dcfb3e99c047.r2.dev/CloudStream%20Desktop.msi',
-                'Windows Setup': 'https://pub-a06300a664b74991ac75dcfb3e99c047.r2.dev/CloudStream%20Desktop.msi',
-                'Windows Setup (.msi)': 'https://pub-a06300a664b74991ac75dcfb3e99c047.r2.dev/CloudStream%20Desktop.msi',
-                'Windows Desktop': 'https://pub-a06300a664b74991ac75dcfb3e99c047.r2.dev/CloudStream%20Desktop.msi',
-                'Windows Standalone (.exe)': 'https://pub-a06300a664b74991ac75dcfb3e99c047.r2.dev/CloudStream%20Desktop.exe'
+                'Desktop Setup': 'https://pub-a06300a664b74991ac75dcfb3e99c047.r2.dev/CloudStream%20Desktop.exe',
+                'Windows Setup': 'https://pub-a06300a664b74991ac75dcfb3e99c047.r2.dev/CloudStream%20Desktop.exe',
+                'Windows Setup (.exe)': 'https://pub-a06300a664b74991ac75dcfb3e99c047.r2.dev/CloudStream%20Desktop.exe',
+                'Windows Desktop': 'https://pub-a06300a664b74991ac75dcfb3e99c047.r2.dev/CloudStream%20Desktop.exe'
             };
             showToast(`Downloading CloudStream (${platform})...`);
             const targetUrl = url || urls[platform];
